@@ -327,7 +327,7 @@ def main():
     print(f"Found {len(newsletters)} newsletter(s).")
 
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    out_path  = os.path.join(repo_root, "gmail-daily-summary.html")
+    out_path  = os.path.join(repo_root, "todays-read.html")
 
     html = build_html(newsletters, display_date)
     with open(out_path, "w", encoding="utf-8") as f:
