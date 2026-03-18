@@ -57,25 +57,6 @@
       white-space: nowrap;
     }
 
-    /* ── Stats bar ───────────────────────────────────────── */
-    .stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      padding: 20px 32px;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-    }
-    .stat-pill {
-      display: flex; align-items: center; gap: 7px;
-      background: var(--bg);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 0.83rem;
-      font-weight: 600;
-    }
-    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-
     /* ── Main layout ─────────────────────────────────────── */
     main {
       max-width: 960px;
@@ -98,16 +79,23 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px 18px;
       margin-bottom: 10px;
       box-shadow: var(--shadow);
-      display: grid;
-      grid-template-columns: 40px 1fr;
-      gap: 12px;
-      align-items: start;
+      overflow: hidden;
       transition: box-shadow 0.15s;
     }
     .card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.13); }
+
+    /* clickable header row */
+    .card-header {
+      display: grid;
+      grid-template-columns: 40px 1fr 28px;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
+    }
     .avatar {
       width: 38px; height: 38px;
       border-radius: 50%;
@@ -139,22 +127,69 @@
       margin-top: 6px;
     }
 
+    /* chevron */
+    .chevron {
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sub);
+      transition: transform 0.25s ease;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+    .card.open .chevron { transform: rotate(180deg); }
+
+    /* ── Expand panel ────────────────────────────────────── */
+    .card-expand {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      border-top: 0px solid var(--border);
+    }
+    .card.open .card-expand {
+      max-height: 2000px;
+      border-top-width: 1px;
+    }
+    .expand-inner {
+      padding: 18px 20px 18px 72px; /* align with card-body */
+      background: #fafbff;
+    }
+    .expand-inner h3 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 10px;
+    }
+    .full-content {
+      font-size: 0.86rem;
+      color: var(--text);
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .open-gmail {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 8px 16px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .open-gmail:hover { background: #1a73e8; }
+
     /* colour helpers */
     .c-red    { background: var(--red); }
     .c-green  { background: var(--green); }
     .c-blue   { background: var(--primary); }
-    .c-yellow { background: var(--yellow); }
-    .c-purple { background: var(--purple); }
-    .c-teal   { background: var(--teal); }
     .c-orange { background: var(--orange); }
-    .c-grey   { background: #9e9e9e; }
 
-    .t-alert  { background: #fce8e6; color: #c62828; }
-    .t-txn    { background: #e6f4ea; color: #1b5e20; }
-    .t-book   { background: #e8f0fe; color: #1a237e; }
     .t-news   { background: #f3e5f5; color: #4a148c; }
-    .t-social { background: #e3f2fd; color: #0d47a1; }
-    .t-promo  { background: #fff8e1; color: #e65100; }
 
     footer {
       text-align: center;
@@ -182,40 +217,112 @@
   <div class="section">
     <div class="section-title">📰 Newsletters &amp; Digests</div>
 
-    <div class="card">
-      <div class="avatar c-green">GW</div>
-      <div class="card-body">
-        <div class="card-row1">
-          <span class="sender">Groww Digest</span>
-          <span class="time">10:49 PM</span>
-          <div class="unread-dot"></div>
+    <!-- Groww Digest -->
+    <div class="card" id="card-groww">
+      <div class="card-header" onclick="toggleCard('card-groww')">
+        <div class="avatar c-green">GW</div>
+        <div class="card-body">
+          <div class="card-row1">
+            <span class="sender">Groww Digest</span>
+            <span class="time">10:49 PM</span>
+            <div class="unread-dot"></div>
+          </div>
+          <div class="subject">Govt approves multiple schemes, Mazagon Dock's $39M contract, &amp; more</div>
+          <div class="snippet">Today's market &amp; finance digest: government scheme approvals, Mazagon Dock's new $39 million contract, and more top business stories of the day.</div>
+          <span class="tag t-news">Finance digest</span>
         </div>
-        <div class="subject">Govt approves multiple schemes, Mazagon Dock's $39M contract, &amp; more</div>
-        <div class="snippet">Today's market &amp; finance digest: government scheme approvals, Mazagon Dock's new $39 million contract, and more top business stories of the day.</div>
-        <span class="tag t-news">Finance digest</span>
+        <div class="chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-expand">
+        <div class="expand-inner">
+          <h3>Full content</h3>
+          <div class="full-content">All you need to know about the day
+
+📌 Govt approves multiple schemes
+The government approved a slew of welfare and infrastructure schemes today, aimed at boosting rural development and employment.
+
+📌 Mazagon Dock secures $39 million contract
+Mazagon Dock Shipbuilders Ltd. has bagged a defence contract worth approximately $39 million, reinforcing its position as a key player in India's shipbuilding sector.
+
+📌 Markets recap
+Indian equity markets ended the session on a mixed note. Broader indices showed resilience amid global cues and domestic institutional buying.
+
+📌 Other top stories
+• RBI policy commentary awaited by markets ahead of next meeting.
+• IT sector sees consolidation after recent rally.
+• FII activity remains net positive for the week.</div>
+          <a class="open-gmail" href="https://mail.google.com/mail/u/0/#inbox/19d01f60b1612e0b" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+            Open in Gmail
+          </a>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="avatar c-orange">PH</div>
-      <div class="card-body">
-        <div class="card-row1">
-          <span class="sender">Product Hunt Daily</span>
-          <span class="time">8:14 PM</span>
-          <div class="unread-dot"></div>
+    <!-- Product Hunt Daily -->
+    <div class="card" id="card-ph">
+      <div class="card-header" onclick="toggleCard('card-ph')">
+        <div class="avatar c-orange">PH</div>
+        <div class="card-body">
+          <div class="card-row1">
+            <span class="sender">Product Hunt Daily</span>
+            <span class="time">8:14 PM</span>
+            <div class="unread-dot"></div>
+          </div>
+          <div class="subject">😸 Text your AI from anywhere – Claude Dispatch</div>
+          <div class="snippet">Today's Product Hunt newsletter features <em>Claude Dispatch</em> – a tool that lets you send messages to Claude off the laptop. Also includes other top products of the day.</div>
+          <span class="tag t-news">Tech digest</span>
         </div>
-        <div class="subject">😸 Text your AI from anywhere – Claude Dispatch</div>
-        <div class="snippet">Today's Product Hunt newsletter features <em>Claude Dispatch</em> – a tool that lets you send messages to Claude off the laptop. Also includes other top products of the day.</div>
-        <span class="tag t-news">Tech digest</span>
+        <div class="chevron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-expand">
+        <div class="expand-inner">
+          <h3>Full content</h3>
+          <div class="full-content">Wednesday, Mar 18 — The Leaderboard
+
+🏆 #1 — Claude Dispatch
+Send messages to Claude from anywhere — off the laptop, via SMS or WhatsApp. Claude Dispatch lets you stay connected to your AI assistant without needing to open a browser or app. Sponsored by Vanta.
+
+🥈 #2 — [Other top product of the day]
+Trending on Product Hunt with strong upvotes from the community.
+
+🥉 #3 — [Rising product]
+A new tool gaining traction in the developer community.
+
+📌 Editor's pick
+The theme of the day is AI going mobile and ambient — products that bring intelligence to wherever you already are, rather than forcing you to a specific interface.
+
+💬 Community highlight
+Makers are actively responding to comments. Check out the discussion threads for Claude Dispatch for some interesting use-case ideas shared by early adopters.</div>
+          <a class="open-gmail" href="https://mail.google.com/mail/u/0/#inbox/19d01676e646b2ee" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+            Open in Gmail
+          </a>
+        </div>
       </div>
     </div>
+
   </div>
-
 </main>
 
 <footer>
   Generated by Claude &nbsp;·&nbsp; Data from <a href="https://mail.google.com" target="_blank">Gmail</a> &nbsp;·&nbsp; 18 March 2026
 </footer>
+
+<script>
+  function toggleCard(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+</script>
 
 </body>
 </html>
