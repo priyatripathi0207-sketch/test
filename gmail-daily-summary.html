@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gmail Daily Summary – Wed, 18 Mar 2026</title>
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --primary: #4285F4;
+      --red: #EA4335;
+      --green: #34A853;
+      --yellow: #FBBC04;
+      --purple: #7c4dff;
+      --teal: #00bcd4;
+      --orange: #ff6d00;
+      --text: #202124;
+      --sub: #5f6368;
+      --border: #e0e0e0;
+      --shadow: 0 1px 4px rgba(0,0,0,0.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+      color: #fff;
+      padding: 28px 32px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .gmail-logo {
+      width: 44px; height: 44px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; color: #EA4335;
+      flex-shrink: 0;
+    }
+    header h1 { font-size: 1.55rem; font-weight: 700; }
+    header p  { font-size: 0.88rem; opacity: 0.88; margin-top: 3px; }
+    .badge {
+      margin-left: auto;
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    /* ── Stats bar ───────────────────────────────────────── */
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 20px 32px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-pill {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--bg);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.83rem;
+      font-weight: 600;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── Main layout ─────────────────────────────────────── */
+    main {
+      max-width: 960px;
+      margin: 28px auto;
+      padding: 0 20px 60px;
+    }
+    .section { margin-bottom: 30px; }
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+
+    /* ── Email card ──────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 12px;
+      align-items: start;
+      transition: box-shadow 0.15s;
+    }
+    .card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.13); }
+    .avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; color: #fff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .card-body {}
+    .card-row1 {
+      display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    }
+    .sender  { font-weight: 600; font-size: 0.9rem; }
+    .time    { font-size: 0.76rem; color: var(--sub); margin-left: auto; white-space: nowrap; }
+    .subject { font-size: 0.88rem; font-weight: 600; margin-top: 2px; color: var(--text); }
+    .snippet { font-size: 0.82rem; color: var(--sub); margin-top: 4px; line-height: 1.45; }
+    .tag {
+      display: inline-block;
+      border-radius: 10px;
+      padding: 2px 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .unread-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--primary);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    /* colour helpers */
+    .c-red    { background: var(--red); }
+    .c-green  { background: var(--green); }
+    .c-blue   { background: var(--primary); }
+    .c-yellow { background: var(--yellow); }
+    .c-purple { background: var(--purple); }
+    .c-teal   { background: var(--teal); }
+    .c-orange { background: var(--orange); }
+    .c-grey   { background: #9e9e9e; }
+
+    .t-alert  { background: #fce8e6; color: #c62828; }
+    .t-txn    { background: #e6f4ea; color: #1b5e20; }
+    .t-book   { background: #e8f0fe; color: #1a237e; }
+    .t-news   { background: #f3e5f5; color: #4a148c; }
+    .t-social { background: #e3f2fd; color: #0d47a1; }
+    .t-promo  { background: #fff8e1; color: #e65100; }
+
+    footer {
+      text-align: center;
+      font-size: 0.76rem;
+      color: var(--sub);
+      padding-bottom: 20px;
+    }
+    footer a { color: var(--primary); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="gmail-logo">M</div>
+  <div>
+    <h1>Gmail Daily Summary</h1>
+    <p>priya.tripathi0207@gmail.com &nbsp;·&nbsp; Wednesday, 18 March 2026</p>
+  </div>
+  <div class="badge">19 emails today</div>
+</header>
+
+<!-- Stats bar -->
+<div class="stats">
+  <div class="stat-pill"><span class="dot" style="background:#EA4335"></span>2 Security / Alerts</div>
+  <div class="stat-pill"><span class="dot" style="background:#34A853"></span>2 Transactions</div>
+  <div class="stat-pill"><span class="dot" style="background:#4285F4"></span>3 Bookings</div>
+  <div class="stat-pill"><span class="dot" style="background:#7c4dff"></span>3 Newsletters</div>
+  <div class="stat-pill"><span class="dot" style="background:#00bcd4"></span>2 Social</div>
+  <div class="stat-pill"><span class="dot" style="background:#ff6d00"></span>7 Promotions</div>
+</div>
+
+<main>
+
+  <!-- ── SECURITY & ALERTS ──────────────────────────────── -->
+  <div class="section">
+    <div class="section-title">🔒 Security &amp; Alerts</div>
+
+    <div class="card">
+      <div class="avatar c-red">GH</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">GitHub</span>
+          <span class="time">10:58 AM</span>
+        </div>
+        <div class="subject">[GitHub] Please verify your device</div>
+        <div class="snippet">A sign-in attempt from an unrecognised device requires further verification. Enter the verification code on the unrecognised device to complete login.</div>
+        <span class="tag t-alert">⚠ Action required</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-blue">G</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">Google</span>
+          <span class="time">11:21 AM</span>
+        </div>
+        <div class="subject">Security alert – New app access granted</div>
+        <div class="snippet">You allowed <strong>Claude for Gmail</strong> access to some of your Google Account data. If you didn't authorise this, review your account security immediately.</div>
+        <span class="tag t-alert">Security notice</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TRANSACTIONS ───────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title">💳 Transactions &amp; Payments</div>
+
+    <div class="card">
+      <div class="avatar c-green">RZ</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">Razorpay</span>
+          <span class="time">11:31 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Payment successful for Openhouse Technologies Pvt. Ltd.</div>
+        <div class="snippet">₹885.00 paid successfully via card XXXX-XXXX-XXXX-1637 on 18 Mar 2026, 11:00 PM IST. Payment ID: <code>pay_SSltzEIiy2WJrU</code></div>
+        <span class="tag t-txn">✓ Payment confirmed</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-blue">HD</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">HDFC Bank InstaAlerts</span>
+          <span class="time">11:01 PM</span>
+        </div>
+        <div class="subject">Rs.885.00 debited via Credit Card **1637</div>
+        <div class="snippet">₹885.00 debited from your HDFC Credit Card ending 1637 towards <strong>Raz*Openhouse Technolo</strong> on 18 Mar 2026 at 23:01:00.</div>
+        <span class="tag t-txn">Bank debit alert</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOOKINGS ───────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title">🎬 Bookings &amp; Tickets</div>
+
+    <div class="card">
+      <div class="avatar c-red">BM</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">BookMyShow</span>
+          <span class="time">10:53 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Your Tickets – Dhurandhar The Revenge (A)</div>
+        <div class="snippet">Booking ID: <strong>TFA3A6R</strong> &nbsp;|&nbsp; 9:50 AM, Thu 19 Mar 2026 &nbsp;|&nbsp; PVR Nexus (Forum), Koramangala – AUDI 11 GOLD, seats GL-A7, A8, Bengaluru.</div>
+        <span class="tag t-book">✓ Confirmed</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-red">BM</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">BookMyShow</span>
+          <span class="time">9:26 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Your Tickets – Dhurandhar The Revenge (A) <span style="font-weight:400;font-size:0.78rem;color:var(--sub)">(earlier copy)</span></div>
+        <div class="snippet">Duplicate booking confirmation email for the same booking ID TFA3A6R – same show, same seats.</div>
+        <span class="tag t-book">Duplicate confirmation</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-red">BM</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">BookMyShow</span>
+          <span class="time">5:09 PM</span>
+        </div>
+        <div class="subject">The BIGGEST blockbuster is here 🧨 – Dhurandhar: The Revenge</div>
+        <div class="snippet">Promotional email encouraging you to book tickets for <em>Dhurandhar: The Revenge</em>.</div>
+        <span class="tag t-promo">Promo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NEWSLETTERS ────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title">📰 Newsletters &amp; Digests</div>
+
+    <div class="card">
+      <div class="avatar c-green">GW</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">Groww Digest</span>
+          <span class="time">10:49 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Govt approves multiple schemes, Mazagon Dock's $39M contract, &amp; more</div>
+        <div class="snippet">Today's market &amp; finance digest: government scheme approvals, Mazagon Dock's new $39 million contract, and more top business stories of the day.</div>
+        <span class="tag t-news">Finance digest</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-orange">PH</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">Product Hunt Daily</span>
+          <span class="time">8:14 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">😸 Text your AI from anywhere – Claude Dispatch</div>
+        <div class="snippet">Today's Product Hunt newsletter features <em>Claude Dispatch</em> – a tool that lets you send messages to Claude off the laptop. Also includes other top products of the day.</div>
+        <span class="tag t-news">Tech digest</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-blue">LI</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">LinkedIn</span>
+          <span class="time">8:02 PM</span>
+        </div>
+        <div class="subject">💬 Bhavin Turakhia recently posted</div>
+        <div class="snippet">"As answers get cheaper, good questions get more valuable" – a post from Bhavin Turakhia worth reading on LinkedIn.</div>
+        <span class="tag t-news">Post notification</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SOCIAL ─────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title">🤝 Social &amp; Connections</div>
+
+    <div class="card">
+      <div class="avatar c-blue">LI</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">LinkedIn – Anshul Pandey</span>
+          <span class="time">7:13 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">I want to connect</div>
+        <div class="snippet"><strong>Anshul Pandey</strong>, Software Engineer Intern at Zeta, sent you a connection request and is waiting for your response.</div>
+        <span class="tag t-social">Connection request</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-teal">TG</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">The Little Gym India</span>
+          <span class="time">12:33 PM</span>
+        </div>
+        <div class="subject">The Little Gym of India – Submission Confirmation</div>
+        <div class="snippet">Thank you for your interest in The Little Gym! A team member will contact you shortly. Submitted: Priya Tripathi, +919052088053.</div>
+        <span class="tag t-social">Inquiry confirmed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROMOTIONS ─────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title">🏷 Promotions</div>
+
+    <div class="card">
+      <div class="avatar c-blue">HD</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">HDFC Bank</span>
+          <span class="time">7:27 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Unlock Your LIFETIME FREE Credit Card &amp; Get EXTRA Rs.250 Voucher!</div>
+        <div class="snippet">HDFC Bank promotional offer – apply for a lifetime-free credit card and get an additional ₹250 Amazon voucher. Also highlights Scan &amp; Pay offer.</div>
+        <span class="tag t-promo">Promotion</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-teal">LK</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">Lenskart</span>
+          <span class="time">7:24 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Season's hottest tints are only a click away</div>
+        <div class="snippet">Sun's out, sunnies out! Lenskart's seasonal sunglasses collection promotion.</div>
+        <span class="tag t-promo">Eyewear sale</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-orange">IK</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">IKEA</span>
+          <span class="time">4:59 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">IKEA – Proof of Payment 228237960</div>
+        <div class="snippet">Tax documents for your IKEA order are attached. Order reference: 228237960.</div>
+        <span class="tag t-txn">Order receipt</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-purple">IS</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">ISB – Office of Advancement</span>
+          <span class="time">6:57 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Thank you for giving back to shape ISB's next 25!</div>
+        <div class="snippet">The Indian School of Business thanks you for your contribution towards shaping ISB's next 25 years.</div>
+        <span class="tag t-promo">Alumni outreach</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-red">BM</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">BookMyShow</span>
+          <span class="time">6:56 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">When courage stands tall ⚔️ – Ustaad Bhagat Singh &amp; more</div>
+        <div class="snippet">BookMyShow promotes <em>Ustaad Bhagat Singh</em> along with <em>Dhurandhar: The Revenge</em>, Youth, Aadu 3, Bhishmar, and Love Mocktail 3.</div>
+        <span class="tag t-promo">Movie promo</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-grey">NB</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">Niva Bupa Health Insurance</span>
+          <span class="time">2:32 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Secure your international trip with Niva Bupa Travel Insurance</div>
+        <div class="snippet">Promotional email for Niva Bupa travel insurance for international trips.</div>
+        <span class="tag t-promo">Insurance promo</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="avatar c-orange">PF</div>
+      <div class="card-body">
+        <div class="card-row1">
+          <span class="sender">Pepperfry</span>
+          <span class="time">1:05 PM</span>
+          <div class="unread-dot"></div>
+        </div>
+        <div class="subject">Big Festive Vibes 🎉 Upto 70% OFF Inside 🤩</div>
+        <div class="snippet">Pepperfry festive sale with up to 70% off on furniture and home décor. Exclusive coupon inside.</div>
+        <span class="tag t-promo">Furniture sale</span>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  Generated by Claude &nbsp;·&nbsp; Data from <a href="https://mail.google.com" target="_blank">Gmail</a> &nbsp;·&nbsp; 18 March 2026
+</footer>
+
+</body>
+</html>
